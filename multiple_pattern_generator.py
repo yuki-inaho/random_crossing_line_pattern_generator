@@ -6,8 +6,9 @@ from pathlib import Path
 from src.image import save_image
 from src.utils import convert_mm_to_pixel
 
-NUMBER_OF_LANDMARKS = 100
+NUMBER_OF_LANDMARKS = 200
 NUMBER_OF_SEGMENTS = 100
+LINE_THICKNESS = 10
 
 NUMBER_OF_SHEETS = 10
 OUTPUT_DIR = "outputs"
@@ -41,7 +42,7 @@ def draw_full_line(image: np.ndarray, point_1: Tuple[int], point_2: Tuple[int], 
     return image_with_line
 
 
-def generate_pattarn(save_path):
+def generate_pattarn(save_path, color=(0, 0, 0), thickness=3):
     canvas = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3), dtype=np.uint8)
     canvas[:] = 255
 
@@ -60,8 +61,8 @@ def generate_pattarn(save_path):
             canvas,
             landmarks_xy[landmark_pairs[i, 0], :],
             landmarks_xy[landmark_pairs[i, 1], :],
-            color=(0, 0, 0),
-            thickness=3,
+            color=color,
+            thickness=thickness,
         )
     save_image(save_path, canvas)
 
@@ -69,4 +70,4 @@ def generate_pattarn(save_path):
 output_dir_pathlib = Path(OUTPUT_DIR)
 for i in range(NUMBER_OF_SHEETS):
     output_image_path = str(output_dir_pathlib.joinpath(f"{i}.png"))
-    generate_pattarn(output_image_path)
+    generate_pattarn(output_image_path, thickness=LINE_THICKNESS)
